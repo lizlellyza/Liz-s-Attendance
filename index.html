@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f5ef">
+  <title>Lizle Llyza Ugot | Attendance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f5ef;
+      --white: #fffefa;
+      --ink: #172a29;
+      --muted: #64736d;
+      --line: #dce3db;
+      --green: #17695a;
+      --green-soft: #dcece3;
+      --coral: #e87659;
+      --coral-soft: #f9e3da;
+      --yellow: #dfc94d;
+      --yellow-soft: #f5efc8;
+      --blue: #4a7180;
+      --blue-soft: #deeaec;
+      --shadow: 0 16px 42px rgba(30, 55, 46, .06);
+      font-family: "DM Sans", "Segoe UI", sans-serif;
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    button, select { font: inherit; }
+    button, select { color: inherit; }
+    .shell { max-width: 1440px; margin: 0 auto; padding: 0 48px 56px; }
+    .topbar { height: 76px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .brand-mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 9px; background: var(--green); color: white; font-family: "Fraunces", Georgia, serif; font-size: 17px; }
+    .top-meta { display: flex; align-items: center; gap: 9px; color: var(--muted); font-size: 12px; }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); }
+    .intro { padding: 46px 0 29px; display: flex; justify-content: space-between; align-items: end; gap: 24px; }
+    .eyebrow { color: var(--green); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { margin: 10px 0 8px; font: 500 43px/1.1 "Fraunces", Georgia, serif; letter-spacing: 0; }
+    .intro p { margin: 0; color: var(--muted); font-size: 14px; }
+    .period-tag { flex: 0 0 auto; border: 1px solid var(--line); background: rgba(255,254,250,.72); padding: 10px 13px; border-radius: 6px; font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted); }
+    .toolbar { min-height: 56px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 18px; }
+    .view-switch { display: flex; align-items: center; gap: 4px; }
+    .view-switch button, .action-button { border: 0; background: transparent; padding: 9px 13px; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .view-switch button[aria-pressed="true"] { background: var(--ink); color: white; }
+    .toolbar-actions { display: flex; align-items: center; gap: 8px; }
+    .year-select, .month-select { border: 1px solid var(--line); background: var(--white); padding: 9px 30px 9px 11px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+    .year-select { min-width: 106px; }
+    .month-select { min-width: 140px; }
+    .action-button { border: 1px solid var(--line); background: var(--white); }
+    .action-button:hover, .month-select:hover { border-color: #9caca2; }
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 24px 0 31px; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: var(--white); box-shadow: var(--shadow); }
+    .metric { min-height: 119px; padding: 19px 22px 18px; border-right: 1px solid var(--line); }
+    .metric:last-child { border-right: 0; }
+    .metric-label { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; font-weight: 600; }
+    .metric-mark { width: 8px; height: 8px; border-radius: 2px; background: var(--green); }
+    .metric:nth-child(2) .metric-mark { background: var(--coral); }
+    .metric:nth-child(3) .metric-mark { background: var(--yellow); }
+    .metric:nth-child(4) .metric-mark { background: var(--blue); }
+    .metric-value { margin-top: 12px; font: 500 31px/1 "Fraunces", Georgia, serif; }
+    .metric-note { margin-top: 7px; color: var(--muted); font-size: 11px; }
+    .content-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(290px, .85fr); gap: 20px; align-items: start; }
+    .panel { border: 1px solid var(--line); border-radius: 7px; background: var(--white); box-shadow: var(--shadow); overflow: hidden; }
+    .panel-head { min-height: 69px; padding: 17px 20px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--line); }
+    .calendar-head-meta { display: flex; align-items: center; gap: 11px; }
+    .panel-head h2 { margin: 0; font-size: 14px; font-weight: 700; }
+    .panel-subtitle { margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .mini-label { font: 10px "IBM Plex Mono", monospace; color: var(--muted); white-space: nowrap; }
+    .month-list { padding: 6px 20px 11px; }
+    .month-row { display: grid; grid-template-columns: 76px minmax(100px, 1fr) 83px 55px; gap: 13px; align-items: center; min-height: 44px; border-bottom: 1px solid #edf0ea; cursor: pointer; }
+    .month-row:last-child { border-bottom: 0; }
+    .month-name { font-size: 12px; font-weight: 600; }
+    .bar-track { height: 8px; background: #edf0ea; border-radius: 20px; overflow: hidden; position: relative; }
+    .bar-required { height: 100%; background: #c6d9cd; border-radius: inherit; position: absolute; left: 0; top: 0; }
+    .bar-actual { height: 100%; background: var(--green); border-radius: inherit; position: absolute; left: 0; top: 0; opacity: .88; }
+    .month-rto { text-align: right; font: 11px "IBM Plex Mono", monospace; }
+    .month-days { text-align: right; color: var(--muted); font: 10px "IBM Plex Mono", monospace; }
+    .month-row:hover .month-name { color: var(--green); }
+    .legend-row { padding: 13px 20px 16px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 17px; color: var(--muted); font-size: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { display: inline-block; width: 12px; height: 6px; border-radius: 4px; background: #c6d9cd; }
+    .legend-swatch.actual { background: var(--green); }
+    .breakdown { padding: 18px 20px 19px; }
+    .breakdown-row { display: grid; grid-template-columns: 1fr 30px; gap: 10px; align-items: center; margin: 0 0 17px; }
+    .breakdown-row:last-child { margin-bottom: 0; }
+    .breakdown-label { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: 11px; }
+    .breakdown-label span:last-child { color: var(--muted); }
+    .breakdown-track { height: 5px; border-radius: 8px; background: #edf0ea; overflow: hidden; }
+    .breakdown-fill { height: 100%; border-radius: inherit; background: var(--green); }
+    .breakdown-row:nth-child(2) .breakdown-fill { background: var(--coral); }
+    .breakdown-row:nth-child(3) .breakdown-fill { background: #c6ac2a; }
+    .breakdown-row:nth-child(4) .breakdown-fill { background: var(--blue); }
+    .breakdown-row:nth-child(5) .breakdown-fill { background: #9a7962; }
+    .breakdown-number { text-align: right; font: 11px "IBM Plex Mono", monospace; }
+    .calendar-panel { grid-column: 1 / -1; }
+    .calendar-wrap { padding: 18px 20px 21px; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    .weekday { padding: 0 0 5px 5px; color: var(--muted); font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .day-cell { min-height: 75px; padding: 8px; border: 1px solid var(--line); border-radius: 5px; background: #fffefa; }
+    .day-cell.empty { border-color: transparent; background: transparent; }
+    .day-number { color: var(--muted); font: 10px "IBM Plex Mono", monospace; }
+    .day-code { display: inline-block; margin-top: 11px; padding: 4px 6px; border-radius: 3px; background: var(--green-soft); color: #15574b; font: 500 10px "IBM Plex Mono", monospace; white-space: nowrap; }
+    .day-code-select { display: block; width: 100%; min-width: 0; max-width: 100%; margin-top: 8px; padding: 4px 14px 4px 4px; border: 1px solid transparent; border-radius: 3px; appearance: auto; background: var(--green-soft); color: #15574b; font: 500 9px "IBM Plex Mono", monospace; text-overflow: ellipsis; cursor: pointer; }
+    .day-code-select.code-unrecorded { background: #edf0ea; color: #78827b; }
+    .day-code-select:focus-visible { outline: 2px solid var(--green); outline-offset: 1px; }
+    .code-onsite { background: var(--coral-soft); color: #9b432f; }
+    .code-workation { background: var(--yellow-soft); color: #766515; }
+    .code-leave { background: #f4e3df; color: #924638; }
+    .code-holiday { background: var(--blue-soft); color: #365b69; }
+    .code-special { background: #e9e9dc; color: #526044; }
+    .month-summary { margin-top: 19px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 9px; }
+    .summary-origin { flex: 0 0 100%; color: var(--muted); font-size: 10px; }
+    .summary-chip { padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; color: var(--muted); font-size: 10px; }
+    .summary-chip strong { color: var(--ink); font: 500 10px "IBM Plex Mono", monospace; }
+    .empty-state { margin: 0; padding: 16px 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .day-code.code-unrecorded { background: #edf0ea; color: #78827b; }
+    .annual-only[hidden], .month-only[hidden] { display: none; }
+    .footnote { margin: 24px 0 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .footnote a { color: var(--green); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 900px) {
+      .shell { padding: 0 25px 40px; }
+      .content-grid { grid-template-columns: 1fr; }
+      .calendar-panel { grid-column: auto; }
+    }
+    @media (max-width: 620px) {
+      .shell { padding: 0 16px 32px; }
+      .topbar { height: 63px; }
+      .top-meta { font-size: 10px; }
+      .intro { padding: 34px 0 23px; align-items: start; flex-direction: column; gap: 15px; }
+      h1 { font-size: 35px; }
+      .toolbar { padding: 11px 0; align-items: flex-start; flex-direction: column; }
+      .toolbar-actions { width: 100%; }
+      .year-select, .month-select { min-width: 0; flex: 1; padding-right: 20px; padding-left: 8px; }
+      .toolbar-actions .action-button { padding-right: 8px; padding-left: 8px; }
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metric { min-height: 103px; padding: 15px; }
+      .metric:nth-child(2) { border-right: 0; }
+      .metric:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .metric-value { font-size: 27px; }
+      .month-list { padding-right: 13px; padding-left: 13px; }
+      .month-row { grid-template-columns: 66px minmax(50px, 1fr) 59px 43px; gap: 8px; }
+      .calendar-wrap { padding: 14px 10px; }
+      .calendar-grid { gap: 3px; }
+      .day-cell { min-height: 62px; padding: 5px 4px; }
+      .day-code { margin-top: 9px; padding: 3px 4px; font-size: 9px; }
+      .legend-row { padding-right: 13px; padding-left: 13px; gap: 12px; }
+    }
+    @media print {
+      :root { --paper: white; }
+      .shell { max-width: none; padding: 0; }
+      .toolbar, .footnote a { display: none; }
+      .metrics, .panel { box-shadow: none; }
+      .panel { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">L.</span><span>Personal attendance</span></div>
+      <div class="top-meta"><span class="status-dot" aria-hidden="true"></span><span id="snapshot-label">TRACKER DATA · 2026</span></div>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <div class="eyebrow">Team Attendance Tracker / Personal view</div>
+        <h1 id="page-title">Lizle Llyza Ugot</h1>
+        <p>Attendance patterns and office-day progress, month by month.</p>
+      </div>
+      <div class="period-tag" id="period-label">JAN — DEC&nbsp; 2026</div>
+    </section>
+
+    <section class="toolbar" aria-label="Dashboard controls">
+      <div class="view-switch" role="group" aria-label="Attendance view">
+        <button id="overview-button" type="button" aria-pressed="true">Full year</button>
+        <button id="month-button" type="button" aria-pressed="false">Monthly detail</button>
+      </div>
+      <div class="toolbar-actions">
+        <label class="sr-only" for="year-filter">Choose year</label>
+        <select class="year-select" id="year-filter"><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option></select>
+        <label class="sr-only" for="month-filter">Choose month</label>
+        <select class="month-select" id="month-filter">
+          <option value="all">Full year · 2026</option>
+          <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+          <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+          <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+          <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+        </select>
+        <button class="action-button" id="export-button" type="button">Export CSV</button>
+        <button class="action-button" id="print-button" type="button">Print</button>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Attendance summary">
+      <article class="metric"><div class="metric-label"><span>Actual RTO</span><span class="metric-mark"></span></div><div class="metric-value" id="actual-rto">--</div><div class="metric-note" id="actual-note">Recorded office days</div></article>
+      <article class="metric"><div class="metric-label"><span>Required RTO</span><span class="metric-mark"></span></div><div class="metric-value" id="required-rto">--</div><div class="metric-note">Office days expected</div></article>
+      <article class="metric"><div class="metric-label"><span>RTO attainment</span><span class="metric-mark"></span></div><div class="metric-value" id="rto-percent">--</div><div class="metric-note" id="rto-note">Weighted actual / required</div></article>
+      <article class="metric"><div class="metric-label"><span>Work from home</span><span class="metric-mark"></span></div><div class="metric-value" id="wfh-days">--</div><div class="metric-note">Days recorded as WFH</div></article>
+    </section>
+
+    <section class="content-grid annual-only" id="annual-view">
+      <article class="panel">
+        <div class="panel-head"><div><h2>RTO by month</h2><div class="panel-subtitle">Recorded actual days compared with required days</div></div><span class="mini-label">DAYS</span></div>
+        <div class="month-list" id="month-list"></div>
+        <div class="legend-row"><span class="legend-item"><span class="legend-swatch actual"></span>Actual RTO</span><span class="legend-item"><span class="legend-swatch"></span>Required RTO</span><span class="mini-label">Bar scale: 0–15 days</span></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head"><div><h2>Attendance mix</h2><div class="panel-subtitle">2026 tracker category totals</div></div><span class="mini-label">DAYS</span></div>
+        <div class="breakdown" id="annual-breakdown"></div>
+      </article>
+    </section>
+
+    <section class="panel calendar-panel month-only" id="month-view" hidden>
+      <div class="panel-head"><div><h2 id="calendar-title">Monthly attendance</h2><div class="panel-subtitle">Daily attendance codes as entered in the tracker</div></div><div class="calendar-head-meta"><span class="mini-label" id="calendar-count" aria-live="polite"></span><button class="action-button" id="reset-month-edits" type="button" hidden>Reset month edits</button></div></div>
+      <div class="calendar-wrap"><div class="calendar-grid" id="calendar-grid"></div><div class="month-summary" id="month-summary"></div></div>
+    </section>
+
+    <p class="footnote">A personal snapshot copied from the <a href="https://ap2-team-attendance.web.app/" target="_blank" rel="noopener noreferrer">Team Attendance Tracker</a>. 2027 entries reflect the tracker at extraction; 2028 is calendar-only because the tracker does not list that year. Blank dates are unrecorded, not OFF. Dropdown edits are saved in this browser only; tracker totals remain as originally extracted and edits do not update the team tracker.</p>
+  </main>
+
+  <script>
+    const records = [
+      { month: "January", codes: "PH|WKN|OFF|OFF|WKN|WKN|HWKN1|WFH|WFH|OFF|OFF|WFH|WFH|PTO|PM|PM|OFF|OFF|WFH|WFH|PM|PM|WFH|OFF|OFF|WFH|WFH|PM|WFH|PM|OFF", totals: [10, 0, 6, 3.5, 1.5, 0, 0, 21, 10, 9.5, 95] },
+      { month: "February", codes: "OFF|WFH|WFH|PM|PM|WFH|OFF|OFF|WFH|PM|PM|WFH|WFH|OFF|OFF|PTO|PH|PTO|PTO|PTO|OFF|OFF|PTO|WKN|WKN|WKN|PTO|OFF", totals: [6, 0, 4, 3, 6, 0, 0, 19, 7, 7, 100] },
+      { month: "March", codes: "OFF|PTO|PTO|PTO|PTO|PTO|OFF|OFF|WFH|WFH|PM|PM|WFH|OFF|OFF|PM|AM|WFH|AM|PH|OFF|OFF|WFH|WFH|WFH|WKN|WKN|OFF|OFF|WKN|WKN", totals: [7, 2, 3, 4, 5, 0, 0, 21, 8, 9, 113] },
+      { month: "April", codes: "PTO|PH|PH|OFF|OFF|WFH|SL|PM|PH|PM|OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|WFH|PM|WFH|WFH|PM|OFF|OFF|WFH|WFH|PM|PM", totals: [9, 0, 8, 0, 2, 0, 0, 19, 9, 8, 89] },
+      { month: "May", codes: "PH|OFF|OFF|WFH|WFH|PM|PM|PM|OFF|OFF|WFH|PM|WFH|PM|SL|OFF|OFF|WFH|PM|WFH|PM|WFH|OFF|OFF|WFH|WFH|PH|PM|PM|OFF|OFF", totals: [9, 0, 9, 0, 1, 0, 0, 19, 9, 9, 100] },
+      { month: "June", codes: "PTO|WFH|WFH|PM|PM|OFF|OFF|WFH|WFH|PM|PM|PH|OFF|OFF|WFH|WFH|PM|PM|WFH|OFF|OFF|HWFH1|PM|WFH|WFH|PM|OFF|OFF|PM|PM", totals: [9.5, 0, 10, 0, 1.5, 0, 0, 21, 10, 10, 100] },
+      { month: "July", codes: "WFH|WFH|WFH|OFF|OFF|PTO|PTO|PTO|PTO|PTO|OFF|OFF|WFH|WFH|EL|PM|PM|OFF|OFF|WFH|PM|WFH|WFH|PM|OFF|OFF|WFH|WFH|WFH|PM|PM", totals: [11, 0, 6, 0, 6, 0, 0, 23, 9, 6, 67] },
+      { month: "August", codes: "OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|PM|WFH|WFH|WFH|PM|OFF|OFF|OB/LCMT|WFH|WFH|PM|PH|OFF|OFF|PM|WFH|WFH|PM|HWFH1|OFF|OFF|PH", totals: [10.5, 0, 7, 0, 0.5, 1, 0, 19, 9, 8, 89] },
+      { month: "September", codes: "WFH|WFH|PM|PM|OFF|OFF|APE|WFH|WFH|PM|PM|OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|WFH|PM|WFH", totals: [12, 0, 9, 0, 0, 0, 0, 22, 11, 9, 82] },
+      { month: "October", codes: "PM|WFH|OFF|OFF|WFH|WFH|AM|PM|WFH|OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|WFH|WFH|WFH|PM|PM|OFF|OFF|WFH|WFH|WFH|WKN|WKN|OFF", totals: [13, 1, 6, 2, 0, 0, 0, 22, 11, 9, 82] },
+      { month: "November", codes: "PH|PH|WFH|WFH|WKN|WKN|OFF|OFF|WKN|WKN|WKN|WKN|WKN|OFF|OFF|PH|PH|PH|WKN|WKN|OFF|OFF|PM|PM|PM|PM|PM|OFF|OFF|PH", totals: [2, 0, 5, 9, 0, 0, 0, 16, 8, 14, 175] },
+      { month: "December", codes: "PM|PM|PM|WFH|OFF|OFF|PM|PH|PTO|PTO|PTO|OFF|OFF|PTO|HWFH1|WFH|WKN|WKN|OFF|OFF|PTO|WKN|WKN|PH|PH|OFF|OFF|WKN|WKN|PH|PH", totals: [2.5, 0, 4, 6, 5.5, 0, 0, 18, 6, 10, 167] }
+    ];
+    const records2027 = [
+      { month: "January", codes: "PH|OFF|OFF|PTO|PTO|PTO|PTO|PTO|OFF|OFF|PM|WFH|WFH|PM|WFH|OFF|OFF|PM|PM|WFH|PM|PM|OFF|OFF|PM|WFH|WFH|PM|PM|OFF|OFF", totals: [6, 0, 9, 0, 5, 0, 0, 20, 8, 9, 113] },
+      { month: "February", codes: "PM|WFH|WFH|PM|PM|PH|OFF|PM|WFH|WFH|PM|PM|OFF|OFF|PM|WFH|WFH|PM|PM|OFF|OFF|PM|PM|WFH|PTO|PTO|OFF|OFF", totals: [7, 0, 11, 0, 2, 0, 0, 20, 9, 11, 122] },
+      { month: "March", codes: "PM|WFH|WFH|PM|WFH|OFF|OFF|PM|PH|WFH|PM|WFH|OFF|OFF|PM|WFH|WFH|PM|WFH|OFF|OFF|WFH|PM|PM|PH|PH|PH|OFF|WFH|WFH|WFH", totals: [12, 0, 8, 0, 0, 0, 0, 20, 10, 8, 80] },
+      { month: "April", codes: "WKN|WKN|OFF|OFF|WKN|WKN|WKN|WFH|PH|OFF|OFF||||||OFF|OFF||||||OFF|OFF|||||", totals: [1, 0, 0, 5, 0, 0, 0, 21, 11, 5, 45] },
+      { month: "May", codes: "PH|OFF||||||OFF|OFF||||||OFF|PH||||||OFF|OFF||||||OFF|OFF|", totals: [0, 0, 0, 0, 0, 0, 0, 21, 11, 0, 0] },
+      { month: "June", codes: "||||OFF|OFF||||||PH|OFF||||||OFF|OFF||||||OFF|OFF|||", totals: [0, 0, 0, 0, 0, 0, 0, 22, 11, 0, 0] },
+      { month: "July", codes: "WKN|WKN|OFF|OFF|WKN|PTO|PTO|PTO|PTO|OFF|OFF|WKN|WKN|WFH|WFH|WFH|OFF|OFF|PM|WFH|WFH|PM|PM|OFF|OFF|PM|WFH|WFH|PM|PM|OFF", totals: [7, 0, 6, 5, 4, 0, 0, 22, 9, 11, 122] },
+      { month: "August", codes: "OFF||||||OFF|OFF||||||OFF|OFF||||||PH|OFF||||||OFF|OFF|PH|", totals: [0, 0, 0, 0, 0, 0, 0, 21, 11, 0, 0] },
+      { month: "September", codes: "|||OFF|OFF||||||OFF|OFF||||||OFF|OFF||||||OFF|OFF||||", totals: [0, 0, 0, 0, 0, 0, 0, 22, 11, 0, 0] },
+      { month: "October", codes: "|OFF|OFF|WFH|WFH|WKN|WKN|WKN|OFF|OFF|WKN|WKN||||OFF|OFF||||||OFF|OFF||||||OFF|OFF", totals: [2, 0, 0, 5, 0, 0, 0, 21, 11, 5, 45] },
+      { month: "November", codes: "PH|PH||||OFF|OFF||||||OFF|OFF|PTO|PTO|WKN|WKN|WKN|OFF|OFF|WKN|WKN||||OFF|OFF||PH", totals: [0, 0, 0, 5, 2, 0, 0, 19, 9, 5, 56] },
+      { month: "December", codes: "PM|PM|PM|OFF|OFF|PM|PM|PH|WKN|WKN|OFF|OFF|PTO|PTO|PTO|WKN|WKN|OFF|OFF|WKN|WKN|WKN|PTO|PH|PH|OFF|WKN|WKN|WKN|PH|PH", totals: [0, 0, 5, 10, 4, 0, 0, 19, 8, 15, 188] }
+    ];
+    function blankYear(year) {
+      return Array.from({ length: 12 }, (_, monthIndex) => ({
+        month: new Date(year, monthIndex, 1).toLocaleString("en", { month: "long" }),
+        codes: Array(new Date(year, monthIndex + 1, 0).getDate()).fill("").join("|"),
+        totals: Array(11).fill(0)
+      }));
+    }
+    const attendanceByYear = { 2026: records, 2027: records2027, 2028: blankYear(2028) };
+    const totalLabels = ["WFH", "AM", "PM", "WKN", "PTO", "OB", "ML", "Working days", "Required RTO", "Actual RTO", "RTO %"];
+    const attendanceCodes = ["", "OFF", "PH", "WFH", "AM", "PM", "WKN", "PTO", "SL", "EL", "OB", "ML", "HWKN1", "HWKN2", "HPM1", "HPM2", "HWFH1", "HWFH2", "APE", "WKN/LCMT", "OB/LCMT"];
+    const overrideStorageKey = "lizleAttendanceOverridesV1";
+    const codeDescriptions = {
+      "OFF": "Day Off", "PH": "Public Holiday", "WFH": "Work From Home", "AM": "Work On Site (AM)", "PM": "Work On Site (PM)",
+      "WKN": "Workation", "PTO": "Vacation Leave", "SL": "Sick Leave", "EL": "Emergency Leave", "OB": "Official Business",
+      "ML": "Maternity Leave", "HWKN1": "Half PTO + Workation (PTO 1st half)", "HWKN2": "Half Workation + PTO (PTO 2nd half)",
+      "HPM1": "Half PTO + Onsite (PTO 1st half)", "HPM2": "Half Onsite + PTO (PTO 2nd half)",
+      "HWFH1": "Half PTO + WFH (PTO 1st half)", "HWFH2": "Half WFH + PTO (PTO 2nd half)", "APE": "Annual Physical Exam",
+      "WKN/LCMT": "Orange Rainfall Warning", "OB/LCMT": "Red Rainfall Warning"
+    };
+    const yearFilter = document.getElementById("year-filter");
+    const monthFilter = document.getElementById("month-filter");
+    const annualView = document.getElementById("annual-view");
+    const monthView = document.getElementById("month-view");
+    const overviewButton = document.getElementById("overview-button");
+    const monthButton = document.getElementById("month-button");
+    const number = value => Number(value.toFixed(1)).toString();
+    let localOverrides = {};
+    try {
+      const savedOverrides = JSON.parse(localStorage.getItem(overrideStorageKey) || "{}");
+      if (savedOverrides && typeof savedOverrides === "object" && !Array.isArray(savedOverrides)) localOverrides = savedOverrides;
+    } catch { }
+
+    function saveLocalOverrides() {
+      try { localStorage.setItem(overrideStorageKey, JSON.stringify(localOverrides)); } catch { }
+    }
+
+    function recordsForYear() {
+      return attendanceByYear[Number(yearFilter.value)];
+    }
+
+    function hasRecords(items) {
+      return items.some(item => item.codes.split("|").some(Boolean) || item.totals.some(value => Number(value) !== 0));
+    }
+
+    function currentRecords() {
+      const yearRecords = recordsForYear();
+      return monthFilter.value === "all" ? yearRecords : [yearRecords[Number(monthFilter.value)]];
+    }
+
+    function dateKey(item, dayIndex) {
+      return `${yearFilter.value}-${String(recordsForYear().indexOf(item) + 1).padStart(2, "0")}-${String(dayIndex + 1).padStart(2, "0")}`;
+    }
+
+    function effectiveCodes(item) {
+      return item.codes.split("|").map((code, dayIndex) => {
+        const key = dateKey(item, dayIndex);
+        return Object.prototype.hasOwnProperty.call(localOverrides, key) ? localOverrides[key] : code;
+      });
+    }
+
+    function renderMetrics(selected) {
+      const required = selected.reduce((sum, item) => sum + item.totals[8], 0);
+      const actual = selected.reduce((sum, item) => sum + item.totals[9], 0);
+      const wfh = selected.reduce((sum, item) => sum + item.totals[0], 0);
+      const percent = required ? actual / required * 100 : 0;
+      const available = hasRecords(selected);
+      document.getElementById("actual-rto").textContent = available ? number(actual) : "—";
+      document.getElementById("required-rto").textContent = available ? number(required) : "—";
+      document.getElementById("rto-percent").textContent = available && required ? `${Math.round(percent)}%` : "—";
+      document.getElementById("wfh-days").textContent = available ? number(wfh) : "—";
+      document.getElementById("actual-note").textContent = available ? (selected.length === 1 ? `${selected[0].month} actual office days` : "Recorded office days") : `No tracker data for ${yearFilter.value}`;
+      document.getElementById("rto-note").textContent = available ? (selected.length === 1 ? `Tracker reports ${selected[0].totals[10]}% for ${selected[0].month}` : "Weighted actual / required") : "Calendar only";
+    }
+
+    function renderAnnual() {
+      const scale = 15;
+      const yearRecords = recordsForYear();
+      const year = Number(yearFilter.value);
+      const available = hasRecords(yearRecords);
+      document.querySelector("#annual-view .panel-subtitle").textContent = available ? "Recorded actual days compared with required days" : "Calendar only · no tracker data available";
+      document.querySelector("#annual-view .panel:nth-child(2) .panel-subtitle").textContent = available ? `${year} tracker category totals` : "No attendance data available";
+      document.getElementById("month-list").innerHTML = yearRecords.map((item, index) => {
+        const required = item.totals[8];
+        const actual = item.totals[9];
+        return `<div class="month-row" data-month="${index}" tabindex="0" role="button" aria-label="Open ${item.month} ${year} attendance">
+          <span class="month-name">${item.month}</span><span class="bar-track" aria-hidden="true"><span class="bar-required" style="width:${available ? Math.min(required / scale * 100, 100) : 0}%"></span><span class="bar-actual" style="width:${available ? Math.min(actual / scale * 100, 100) : 0}%"></span></span>
+          <span class="month-rto">${available ? `${item.totals[10]}%` : "—"}</span><span class="month-days">${available ? `${number(actual)}/${number(required)}` : "—/—"}</span></div>`;
+      }).join("");
+      const categories = [
+        ["Work from home", yearRecords.reduce((sum, item) => sum + item.totals[0], 0)],
+        ["On-site · AM + PM", yearRecords.reduce((sum, item) => sum + item.totals[1] + item.totals[2], 0)],
+        ["Workation", yearRecords.reduce((sum, item) => sum + item.totals[3], 0)],
+        ["Vacation leave", yearRecords.reduce((sum, item) => sum + item.totals[4], 0)],
+        ["Official business", yearRecords.reduce((sum, item) => sum + item.totals[5], 0)]
+      ];
+      const max = Math.max(...categories.map(([, value]) => value));
+      document.getElementById("annual-breakdown").innerHTML = available ? categories.map(([label, value]) => `<div class="breakdown-row"><div><div class="breakdown-label"><span>${label}</span><span>${number(value)} days</span></div><div class="breakdown-track"><div class="breakdown-fill" style="width:${max ? value / max * 100 : 0}%"></div></div></div><span class="breakdown-number">${number(value)}</span></div>`).join("") : '<p class="empty-state">This year is available as a calendar only. Attendance totals will appear when tracker data is added.</p>';
+      document.querySelectorAll(".month-row").forEach(row => {
+        const open = () => { monthFilter.value = row.dataset.month; render(); };
+        row.onclick = open;
+        row.onkeydown = event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); } };
+      });
+    }
+
+    function codeClass(code) {
+      if (["AM", "PM", "HPM1", "HPM2"].includes(code)) return "code-onsite";
+      if (["WKN", "HWKN1", "HWKN2", "WKN/LCMT"].includes(code)) return "code-workation";
+      if (["PTO", "SL", "EL", "HWFH1", "HWFH2"].includes(code)) return "code-leave";
+      if (code === "PH") return "code-holiday";
+      if (["OB", "ML", "APE", "OB/LCMT"].includes(code)) return "code-special";
+      return "";
+    }
+
+    function renderMonth(item) {
+      const index = recordsForYear().indexOf(item);
+      const year = Number(yearFilter.value);
+      const codes = effectiveCodes(item);
+      const firstDay = new Date(year, index, 1).getDay();
+      const grid = document.getElementById("calendar-grid");
+      const headings = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => `<div class="weekday">${day}</div>`).join("");
+      const blanks = Array.from({ length: firstDay }, () => '<div class="day-cell empty" aria-hidden="true"></div>').join("");
+      const cells = codes.map((code, dayIndex) => {
+        const key = dateKey(item, dayIndex);
+        const options = attendanceCodes.map(option => `<option value="${option}"${option === code ? " selected" : ""}>${option || "—"}</option>`).join("");
+        return `<div class="day-cell"><span class="day-number">${dayIndex + 1}</span><select class="day-code-select ${code ? codeClass(code) : "code-unrecorded"}" data-date="${key}" aria-label="${item.month} ${dayIndex + 1}, ${year} attendance code" title="${code ? codeDescriptions[code] || code : "No attendance code entered"}">${options}</select></div>`;
+      }).join("");
+      grid.innerHTML = headings + blanks + cells;
+      document.getElementById("calendar-title").textContent = `${item.month} ${year}`;
+      const prefix = `${year}-${String(index + 1).padStart(2, "0")}-`;
+      const editCount = Object.keys(localOverrides).filter(key => key.startsWith(prefix)).length;
+      const resetButton = document.getElementById("reset-month-edits");
+      resetButton.hidden = editCount === 0;
+      document.getElementById("calendar-count").textContent = `${codes.length} DAYS${editCount ? ` · ${editCount} LOCAL EDIT${editCount === 1 ? "" : "S"}` : " · EDITABLE"}`;
+      const sourceHasData = hasRecords([item]);
+      const hasLocalEntries = codes.some(Boolean);
+      document.querySelector("#month-view .panel-subtitle").textContent = sourceHasData ? "Choose a code for each date; edits stay local and do not change tracker totals" : hasLocalEntries ? "Local day codes saved; no imported tracker totals are available" : "Choose attendance codes to build a local calendar";
+      document.getElementById("month-summary").innerHTML = sourceHasData ? `<div class="summary-origin">Imported tracker summary · local dropdown edits do not change these totals</div>${totalLabels.map((label, index) => `<span class="summary-chip">${label} <strong>${item.totals[index]}${index === 10 ? "%" : ""}</strong></span>`).join("")}` : '<p class="empty-state">Calendar only. Attendance codes you choose are stored locally; no tracker summary is available for this year.</p>';
+    }
+
+    function render() {
+      const selected = currentRecords();
+      const year = Number(yearFilter.value);
+      const isAnnual = monthFilter.value === "all";
+      document.getElementById("snapshot-label").textContent = year === 2028 ? `CALENDAR ONLY · ${year}` : `TRACKER DATA · ${year}`;
+      document.getElementById("period-label").textContent = `JAN — DEC  ${year}`;
+      monthFilter.options[0].textContent = `Full year · ${year}`;
+      annualView.hidden = !isAnnual;
+      monthView.hidden = isAnnual;
+      overviewButton.setAttribute("aria-pressed", String(isAnnual));
+      monthButton.setAttribute("aria-pressed", String(!isAnnual));
+      renderMetrics(selected);
+      renderAnnual();
+      if (!isAnnual) renderMonth(selected[0]);
+    }
+
+    function exportCsv() {
+      const year = Number(yearFilter.value);
+      const rows = [["Date", "Attendance code", "Description", ...totalLabels]];
+      currentRecords().forEach(item => {
+        effectiveCodes(item).forEach((code, index) => {
+          const date = `${year}-${String(recordsForYear().indexOf(item) + 1).padStart(2, "0")}-${String(index + 1).padStart(2, "0")}`;
+          rows.push([date, code, codeDescriptions[code] || (code ? code : "Not recorded"), ...item.totals]);
+        });
+      });
+      const csv = rows.map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(",")).join("\r\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `lizle-ugot-attendance-${year}${monthFilter.value === "all" ? "" : `-${String(Number(monthFilter.value) + 1).padStart(2, "0")}`}.csv`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
+    yearFilter.addEventListener("change", () => { monthFilter.value = "all"; render(); });
+    monthFilter.addEventListener("change", render);
+    document.getElementById("calendar-grid").addEventListener("change", event => {
+      const select = event.target.closest(".day-code-select");
+      if (!select) return;
+      localOverrides[select.dataset.date] = select.value;
+      saveLocalOverrides();
+      render();
+    });
+    document.getElementById("reset-month-edits").addEventListener("click", () => {
+      const year = Number(yearFilter.value);
+      const month = Number(monthFilter.value) + 1;
+      const prefix = `${year}-${String(month).padStart(2, "0")}-`;
+      Object.keys(localOverrides).filter(key => key.startsWith(prefix)).forEach(key => delete localOverrides[key]);
+      saveLocalOverrides();
+      render();
+    });
+    overviewButton.addEventListener("click", () => { monthFilter.value = "all"; render(); });
+    monthButton.addEventListener("click", () => { if (monthFilter.value === "all") monthFilter.value = "0"; render(); });
+    document.getElementById("export-button").addEventListener("click", exportCsv);
+    document.getElementById("print-button").addEventListener("click", () => window.print());
+    render();
+  </script>
+</body>
+</html>
